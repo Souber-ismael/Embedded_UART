@@ -34,34 +34,34 @@ $(wildcard ../makefile.init) \
 $(wildcard ../makefile.targets) \
 
 
-BUILD_ARTIFACT_NAME := Embedded_driver
+BUILD_ARTIFACT_NAME := Embedded_uartcortexm
 BUILD_ARTIFACT_EXTENSION := elf
 BUILD_ARTIFACT_PREFIX :=
 BUILD_ARTIFACT := $(BUILD_ARTIFACT_PREFIX)$(BUILD_ARTIFACT_NAME)$(if $(BUILD_ARTIFACT_EXTENSION),.$(BUILD_ARTIFACT_EXTENSION),)
 
 # Add inputs and outputs from these tool invocations to the build variables 
 EXECUTABLES += \
-Embedded_driver.elf \
+Embedded_uartcortexm.elf \
 
 MAP_FILES += \
-Embedded_driver.map \
+Embedded_uartcortexm.map \
 
 SIZE_OUTPUT += \
 default.size.stdout \
 
 OBJDUMP_LIST += \
-Embedded_driver.list \
+Embedded_uartcortexm.list \
 
 
 # All Target
 all: main-build
 
 # Main-build Target
-main-build: Embedded_driver.elf secondary-outputs
+main-build: Embedded_uartcortexm.elf secondary-outputs
 
 # Tool invocations
-Embedded_driver.elf Embedded_driver.map: $(OBJS) $(USER_OBJS) C:\Users\admin\STM32CubeIDE\workspace_1.19.0\Embedded_driver\STM32F103RBTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "Embedded_driver.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"C:\Users\admin\STM32CubeIDE\workspace_1.19.0\Embedded_driver\STM32F103RBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Embedded_driver.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Embedded_uartcortexm.elf Embedded_uartcortexm.map: $(OBJS) $(USER_OBJS) C:\Users\admin\STM32CubeIDE\workspace_1.19.0\Embedded_driver\HAL\STM32F103RBTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "Embedded_uartcortexm.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"C:\Users\admin\STM32CubeIDE\workspace_1.19.0\Embedded_driver\HAL\STM32F103RBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Embedded_uartcortexm.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -70,14 +70,14 @@ default.size.stdout: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
 	@echo 'Finished building: $@'
 	@echo ' '
 
-Embedded_driver.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "Embedded_driver.list"
+Embedded_uartcortexm.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "Embedded_uartcortexm.list"
 	@echo 'Finished building: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) Embedded_driver.elf Embedded_driver.list Embedded_driver.map default.size.stdout
+	-$(RM) Embedded_uartcortexm.elf Embedded_uartcortexm.list Embedded_uartcortexm.map default.size.stdout
 	-@echo ' '
 
 secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST)

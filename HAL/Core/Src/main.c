@@ -5,9 +5,7 @@
 #include "gpio.h"
 #include "string.h"
 
-#define RX_BUF_SIZE 32
-char rx_buf[RX_BUF_SIZE];
-uint8_t rx_index = 0;
+
 
 
 void SystemClock_Config(void);
@@ -16,81 +14,92 @@ void SystemClock_Config(void);
 
 
 
+/* Buffer size for incoming UART data */
+#define RX_BUF_SIZE 64
 
-void UART_ReadLine(){
+/* Global reception buffer and index */
+static char    rx_buf[RX_BUF_SIZE];
+static uint8_t rx_index = 0;
 
-	uint8_t c;
+/**
+ * @brief  Reads characters from UART until '\n' or '\r' is received.
+ *         Stores the result in rx_buf as a null-terminated string.
+ *         Ignores characters if buffer is full (overflow protection).
+ */
 
-	while(1){
-	HAL_UART_Transmit(&huart1, &c, 1, HAL_MAX_DELAY);
 
-	if(c == '\n' || c == '\r' ){
-		rx_buf[rx_index]= '\0';
-		rx_index = 0;
-		break;
-	 }
-	else{
-		if(rx_index < RX_BUF_SIZE -1 ){
-			rx_buf[rx_index]=c;
-			rx_index++;
-		}
-	}
-	}
+void UART_ReadLine(void)
+{
+    uint8_t c;
+
+    while (1)
+    {
+        /* Wait indefinitely for one byte */
+        HAL_UART_Receive(&huart1, &c, 1, HAL_MAX_DELAY);
+
+        /* End of line detected — terminate string and reset index */
+        if (c == '\n' || c == '\r')
+        {
+            rx_buf[rx_index] = '\0';
+            rx_index = 0;
+            break;
+        }
+
+        /* Store character if buffer is not full */
+        if (rx_index < RX_BUF_SIZE - 1)
+        {
+            rx_buf[rx_index++] = c;
+        }
+        /* else : buffer full — character discarded silently */
+    }
 }
 
-void ProcessCommand(void)
+/**
+ * @brief  Parses and executes a command received over UART.
+ * @param  cmd : null-terminated string containing the command.
+ *
+ * Supported commands :
+ *   "led on"  -> turns LED on  (PA5)
+ *   "led off" -> turns LED off (PA5)
+ *   other     -> sends error message
+ */
+void ProcessCommand(char *cmd)
 {
-    // led on
-    if (strcmp(cmd,"led on")==0)
+    /* Command : "led on" — turn LED on */
+    if (strncmp(cmd, "led on", 6) == 0)
     {
         HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_SET);
-        char msg[] = "LED ON\r\n";
-        HAL_UART_Transmit(&huart1, (uint8_t*)msg, strlen(msg), 100);
+        HAL_UART_Transmit(&huart1, (uint8_t*)"LED ON\r\n", 8, 100);
         return;
     }
 
-    // led off
-    else if (strcmp(cmd,"led off")==0)
+    /* Command : "led off" — turn LED off */
+    if (strncmp(cmd, "led off", 7) == 0)
     {
         HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET);
-        char msg[] = "LED OFF\r\n";
-        HAL_UART_Transmit(&huart1, (uint8_t*)msg, strlen(msg), 100);
+        HAL_UART_Transmit(&huart1, (uint8_t*)"LED OFF\r\n", 9, 100);
         return;
     }
 
-    else {
-    	 HAL_UART_Transmit(&huart1, (uint8_t*)"Erreur\r\n", 1, 100);
-    	 return;
-    }
-
-
+    /* Unknown command */
+    HAL_UART_Transmit(&huart1, (uint8_t*)"Error: unknown command\r\n", 23, 100);
 }
-
-
 
 int main(void)
 {
+    HAL_Init();
+    SystemClock_Config();
+    MX_GPIO_Init();
+    MX_USART1_UART_Init();
 
-  HAL_Init();
+    while (1)
+    {
+        /* Wait for a complete line from Bluetooth terminal */
+        UART_ReadLine();
 
-  SystemClock_Config();
-
-  MX_GPIO_Init();
-  MX_USART1_UART_Init();
-  MX_TIM2_Init();
-
-
-
-
-  while(1)
-  {
-        // lire une commande
-	      UART_ReadLine();
-
-	      // parser et agir
-	      ProcessCommand();
-  }
-
+        /* Execute the received command */
+        ProcessCommand(rx_buf);
+    }
 }
 
 
