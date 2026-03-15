@@ -1,0 +1,9 @@
+../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_usart.h:1840:26:LL_USART_IsActiveFlag_RXNE	16	static
+../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_usart.h:1851:26:LL_USART_IsActiveFlag_TC	16	static
+../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_usart.h:1862:26:LL_USART_IsActiveFlag_TXE	16	static
+../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_usart.h:2451:25:LL_USART_ReceiveData8	16	static
+../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_usart.h:2474:22:LL_USART_TransmitData8	16	static
+../Core/Src/uart_ll.c:6:6:UART_LL_SendByte	16	static
+../Core/Src/uart_ll.c:15:6:UART_LL_SendString	16	static
+../Core/Src/uart_ll.c:27:9:UART_LL_ReceiveByte	8	static
+../Core/Src/uart_ll.c:37:6:UART_LL_ReadLine	24	static
