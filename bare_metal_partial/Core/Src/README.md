@@ -73,4 +73,4 @@ BM/
 
 ## Bluetooth app
 Android : Serial Bluetooth Terminal
-Baud rate : 115200
+Baud rate : 9600
