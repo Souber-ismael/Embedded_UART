@@ -79,6 +79,7 @@ int main(void)
 	        else
 	        {
 	            UART_LL_SendString("Error\r\n");
+	            UART_LL_SendString("Error\r\n");
 	        }
 	    }
   }
