@@ -1,0 +1,4 @@
+../Core/Src/uart_bm_driver.c:7:6:UART_BM_SendByte	16	static
+../Core/Src/uart_bm_driver.c:20:6:UART_BM_SendString	16	static
+../Core/Src/uart_bm_driver.c:33:9:UART_BM_ReceiveByte	4	static
+../Core/Src/uart_bm_driver.c:46:6:UART_BM_ReadLine	24	static

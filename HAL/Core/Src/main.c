@@ -13,7 +13,6 @@ void SystemClock_Config(void);
 
 
 
-
 /* Buffer size for incoming UART data */
 #define RX_BUF_SIZE 64
 
@@ -22,12 +21,10 @@ static char    rx_buf[RX_BUF_SIZE];
 static uint8_t rx_index = 0;
 
 /**
- * @brief  Reads characters from UART until '\n' or '\r' is received.
- *         Stores the result in rx_buf as a null-terminated string.
- *         Ignores characters if buffer is full (overflow protection).
+ * @brief Reads characters from UART until '\n' or '\r' is received.
+ *        Stores the result in rx_buf as a null-terminated string.
+ *        Ignores characters if buffer is full (overflow protection).
  */
-
-
 void UART_ReadLine(void)
 {
     uint8_t c;
@@ -55,8 +52,8 @@ void UART_ReadLine(void)
 }
 
 /**
- * @brief  Parses and executes a command received over UART.
- * @param  cmd : null-terminated string containing the command.
+ * @brief Parses and executes a command received over UART.
+ * @param cmd : null-terminated string containing the command.
  *
  * Supported commands :
  *   "led on"  -> turns LED on  (PA5)
@@ -101,7 +98,6 @@ int main(void)
         ProcessCommand(rx_buf);
     }
 }
-
 
 void SystemClock_Config(void)
 {
