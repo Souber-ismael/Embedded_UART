@@ -118,6 +118,7 @@ int main(void)
          else
          {
              UART_LL_SendString("Error: unknown command\r\n");
+             UART_LL_SendString("Error: unknown command\r\n");
          }
      }
 
